@@ -38,7 +38,7 @@ namespace ChartingProto
 
       // Predefine the viewing area of the chart
       DateTime minValue = DateTime.Now;
-      DateTime maxValue = minValue.AddSeconds(60);
+      DateTime maxValue = minValue.AddSeconds(900);
 
       chart1.ChartAreas[0].AxisX.Minimum = minValue.ToOADate();
       chart1.ChartAreas[0].AxisX.Maximum = maxValue.ToOADate();
@@ -49,7 +49,7 @@ namespace ChartingProto
       // create a line chart series
       //Series newSeries = new Series("Series1");
       //chart1.Series[0].ChartType = SeriesChartType.SplineArea;
-      chart1.Series[0].BorderWidth = 2;
+      //chart1.Series[0].BorderWidth = 2;
       //chart1.Series[0].Color = Color.Gray;
       //chart1.Series[0].XValueType = ChartValueType.DateTime;
       //chart1.Series.Add(newSeries);
@@ -121,7 +121,7 @@ namespace ChartingProto
       ptSeries.Points.AddXY(timeStamp.ToOADate(), rand.Next(10, 20));
 
       // remove all points from the source series older than 1.5 minutes.
-      double removeBefore = timeStamp.AddSeconds((double)(55) * (-1)).ToOADate();
+      double removeBefore = timeStamp.AddSeconds((double)(850) * (-1)).ToOADate();
       //remove oldest values to maintain a constant number of data points
       while (ptSeries.Points[0].XValue < removeBefore)
       {
@@ -129,7 +129,7 @@ namespace ChartingProto
       }
 
       chart1.ChartAreas[0].AxisX.Minimum = ptSeries.Points[0].XValue;
-      chart1.ChartAreas[0].AxisX.Maximum = DateTime.FromOADate(ptSeries.Points[0].XValue).AddMinutes(1).ToOADate();
+      chart1.ChartAreas[0].AxisX.Maximum = DateTime.FromOADate(ptSeries.Points[0].XValue).AddMinutes(15).ToOADate();
 
       chart1.Invalidate();
     }
