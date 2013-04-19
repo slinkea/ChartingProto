@@ -43,6 +43,12 @@ namespace ChartingProto
       chart1.ChartAreas[0].AxisX.Minimum = minValue.ToOADate();
       chart1.ChartAreas[0].AxisX.Maximum = maxValue.ToOADate();
 
+      chart1.ChartAreas[1].AxisX.Minimum = minValue.ToOADate();
+      chart1.ChartAreas[1].AxisX.Maximum = maxValue.ToOADate();
+
+      chart1.ChartAreas[2].AxisX.Minimum = minValue.ToOADate();
+      chart1.ChartAreas[2].AxisX.Maximum = maxValue.ToOADate();
+
       // start worker threads.
       if (addDataRunner.IsAlive == true)
       {
@@ -84,9 +90,11 @@ namespace ChartingProto
     {
       DateTime timeStamp = DateTime.Now;
 
-      foreach (Series ptSeries in chart1.Series)
+      //foreach (Series ptSeries in chart1.Series)
       {
-        AddNewPoint(timeStamp, ptSeries);
+        AddNewPoint(timeStamp, chart1.Series[0], 35, 37);
+        AddNewPoint(timeStamp, chart1.Series[1], 50, 80);
+        AddNewPoint(timeStamp, chart1.Series[2], 500, 1000);
       }
     }
 
@@ -94,7 +102,7 @@ namespace ChartingProto
     /// new points need to be added.  The new point will be placed at specified
     /// X axis (Date/Time) position with a Y value in a range +/- 1 from the previous
     /// data point's Y value, and not smaller than zero.
-    public void AddNewPoint(DateTime timeStamp, System.Windows.Forms.DataVisualization.Charting.Series ptSeries)
+    public void AddNewPoint(DateTime timeStamp, System.Windows.Forms.DataVisualization.Charting.Series ptSeries, int min, int max)
     {
       double newVal = 0;
 
@@ -107,10 +115,10 @@ namespace ChartingProto
         newVal = 0;
 
       // Add new data point to its series.
-      ptSeries.Points.AddXY(timeStamp.ToOADate(), rand.Next(10, 20));
+      ptSeries.Points.AddXY(timeStamp.ToOADate(), rand.Next(min, max));
 
       // remove all points from the source series older than 1.5 minutes.
-      double removeBefore = timeStamp.AddSeconds((double)(10) * (-1)).ToOADate();
+      double removeBefore = timeStamp.AddSeconds((double)(30) * (-1)).ToOADate();
       //remove oldest values to maintain a constant number of data points
       while (ptSeries.Points[0].XValue < removeBefore)
       {
@@ -118,7 +126,13 @@ namespace ChartingProto
       }
 
       chart1.ChartAreas[0].AxisX.Minimum = ptSeries.Points[0].XValue;
-      chart1.ChartAreas[0].AxisX.Maximum = DateTime.FromOADate(ptSeries.Points[0].XValue).AddSeconds(10).ToOADate();
+      chart1.ChartAreas[0].AxisX.Maximum = DateTime.FromOADate(ptSeries.Points[0].XValue).AddSeconds(30).ToOADate();
+
+      chart1.ChartAreas[1].AxisX.Minimum = ptSeries.Points[0].XValue;
+      chart1.ChartAreas[1].AxisX.Maximum = DateTime.FromOADate(ptSeries.Points[0].XValue).AddSeconds(30).ToOADate();
+
+      chart1.ChartAreas[2].AxisX.Minimum = ptSeries.Points[0].XValue;
+      chart1.ChartAreas[2].AxisX.Maximum = DateTime.FromOADate(ptSeries.Points[0].XValue).AddSeconds(30).ToOADate();
 
       chart1.Invalidate();
     }
